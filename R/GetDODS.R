@@ -112,7 +112,7 @@ GetDODSModelRunInfo <- function(model.url, model.run, download.file = TRUE) {
    return(model.info)
 }
 
-DODSGrab <- function(model.url, model.run, variables, time, lon, lat, levels = NULL, ensembles = NULL, display.url = TRUE, verbose = FALSE, request.sleep = 1) {
+DODSGrab <- function(model.path, model.url, model.run, variables, time, lon, lat, levels = NULL, ensembles = NULL, display.url = TRUE, verbose = FALSE, request.sleep = 1) {
    #Get data from DODS.  Note that this is slower than GribGrab but will work on all operating systems.
    #The output of this function will be the same as the output of ReadGrib in order to maintain consistency across rNOMADS.
    #ALL INDICES START FROM ZERO 
@@ -151,6 +151,7 @@ DODSGrab <- function(model.url, model.run, variables, time, lon, lat, levels = N
        
    for(variable in variables) { 
        preamble <- paste0(model.url, "/", model.run, ".ascii?", variable)
+       preamble_path <- paste0(model.path, "/", model.run, ".ascii?", variable)
        time.str <- paste0("[", paste0(time, collapse = ":"), "]")
     
        l.ind <- !is.null(levels)
@@ -173,6 +174,7 @@ DODSGrab <- function(model.url, model.run, variables, time, lon, lat, levels = N
        lon.str <- paste0("[", paste0(lon, collapse = ":"), "]")
       
        data.url <- paste0(preamble, ensembles.str, time.str, level.str, lat.str, lon.str)  
+       data.path <- paste0(preamble_path, ensembles.str, time.str, level.str, lat.str, lon.str)  
        
        if(display.url) {
            print(data.url)
@@ -180,7 +182,8 @@ DODSGrab <- function(model.url, model.run, variables, time, lon, lat, levels = N
     
        #RCurl needs to be loaded for this to work I think
        #data.txt <- readLines(data.url)
-       data.txt.raw <- RCurl::getURL(data.url, .opts = list(verbose = verbose)) #Read in data
+       #data.txt.raw <- RCurl::getURL(data.url, .opts = list(verbose = verbose)) #Read in data
+       data.txt.raw <- read_file(data.path)
        if(grepl("[eE][rR][rR][oO][rR]", data.txt.raw)) {
            warning(paste0("There may have been an error retrieving data from the NOMADS server.  HTML text is as follows\n", data.txt.raw
            ))
