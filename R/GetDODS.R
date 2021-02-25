@@ -112,7 +112,7 @@ GetDODSModelRunInfo <- function(model.url, model.run, download.file = TRUE) {
    return(model.info)
 }
 
-DODSGrab <- function(model.url, model.run, variables, time, lon, lat, levels = NULL, ensembles = NULL, display.url = TRUE, verbose = FALSE, request.sleep = 1) {
+DODSGrab <- function(read_from_path, model.url, model.run, variables, time, lon, lat, levels = NULL, ensembles = NULL, display.url = TRUE, verbose = FALSE, request.sleep = 1) {
    #Get data from DODS.  Note that this is slower than GribGrab but will work on all operating systems.
    #The output of this function will be the same as the output of ReadGrib in order to maintain consistency across rNOMADS.
    #ALL INDICES START FROM ZERO 
