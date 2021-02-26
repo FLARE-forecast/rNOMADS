@@ -178,7 +178,7 @@ DODSGrab <- function(read_from_path, model.url, model.run, variables, time, lon,
            print(data.url)
        }
        
-       if (read_from_path == '') {
+       if (trimws(read_from_path) == '' || is.null(read_from_path)) {
            #RCurl needs to be loaded for this to work I think
            data.txt.raw <- RCurl::getURL(data.url, .opts = list(verbose = verbose)) #Read in data
 
